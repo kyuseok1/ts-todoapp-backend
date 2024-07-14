@@ -12,11 +12,12 @@ export const getTodos = async (req: Request, res: Response) => {
 };
 
 export const createTodo = async (req: Request, res: Response) => {
-  const { title } = req.body;
+  const { title, dueDate } = req.body;
 
   const newTodo = new Todo({
     title,
     completed: false,
+    dueDate: dueDate || new Date().toISOString(),
   });
 
   try {
@@ -30,12 +31,12 @@ export const createTodo = async (req: Request, res: Response) => {
 
 export const updateTodo = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, completed } = req.body;
+  const { title, completed, dueDate } = req.body;
 
   try {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
-      { title, completed },
+      { title, completed, dueDate: dueDate || new Date().toISOString() },
       { new: true }
     );
     res.status(200).json(updatedTodo);
